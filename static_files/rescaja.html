@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CHAEAParser V1</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="jquery-3.3.1.min.js"></script>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item">
+				<a class="nav-link" href="index.html">Home</a>
+			</li>
+			<li class="nav-item active">
+				<a class="nav-link" href="rescaja.html">Resultados</a>
+			</li>
+			<li class="nav-item">
+					<a class="nav-link" href="docs.html">Documentación</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+    <title>Resultados gráfico de caja</title>
+
+    <style>
+        div.clicks{
+            width: 100%;
+            word-wrap: break-word;
+            font-size: 17px;
+        }
+        table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        font-size: 13px;
+        width: 100%;
+        }
+
+        td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+        }
+
+        tr:nth-child(even) {
+        background-color: #dddddd;
+        }
+    </style>
+
+</head>
+<body>
+    <div style="font-size:16px" id="resultados">Cargando...</div>
+    <div class="clicks" id="clicks"></div>
+
+    <table id="tabla" border="1">
+        <col>
+        <colgroup span="2"></colgroup>
+        <colgroup span="2"></colgroup>
+
+        <tr>
+            <td rowspan="2"></td>
+            <th colspan="5" scope="colgroup">Activo</th>
+            <th colspan="5" scope="colgroup">Teórico</th>
+            <th colspan="5" scope="colgroup">Pragmático</th>
+            <th colspan="5" scope="colgroup">Reflexivo</th>
+
+        </tr>
+        <tr>
+            <th scope="col">Muy bajo</th>
+            <th scope="col">Bajo</th>
+            <th scope="col">Medio</th>
+            <th scope="col">Alto</th>
+            <th scope="col">Muy alto</th>
+
+            <th scope="col">Muy bajo</th>
+            <th scope="col">Bajo</th>
+            <th scope="col">Medio</th>
+            <th scope="col">Alto</th>
+            <th scope="col">Muy alto</th>
+
+            <th scope="col">Muy bajo</th>
+            <th scope="col">Bajo</th>
+            <th scope="col">Medio</th>
+            <th scope="col">Alto</th>
+            <th scope="col">Muy alto</th>
+
+            <th scope="col">Muy bajo</th>
+            <th scope="col">Bajo</th>
+            <th scope="col">Medio</th>
+            <th scope="col">Alto</th>
+            <th scope="col">Muy alto</th>
+        </tr>
+
+    </table>
+</body>
+
+<footer>
+	<script type="text/javascript" src="rescaja.js"></script>
+</footer>
+
+</html>

@@ -1,0 +1,7 @@
+1. Subir los logs y los resultados del test a la base de datos
+2. Parsear logs y tests y llenar las tablas
+3. obtener tabla de doble entrada
+
+a corregir
+DONE-algunos mails estan con mayusc(solucionar con lower)
+-algunos tests estan repetidos
