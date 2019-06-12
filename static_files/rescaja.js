@@ -1,3 +1,4 @@
+
 const clickParser = (res)=>{
     return "<br>"+res.interacciones.join(',')+"<br>"
 }
@@ -10,12 +11,11 @@ const crearTabla = (rangos)=>{
         const tipo = rangos[i];
         //en nros voy a guardar los valores de cada rango
         let nros = [];
-        tipo.forEach(clicks =>{
-            clicks.forEach(elem=>{
+        tipo.forEach(cantPersonas =>{
+            cantPersonas.forEach(elem=>{
                 nros.push(elem)
             })
         })
-        console.log(nros)
         añadirFila(nros,i+1)
     }
 
@@ -56,15 +56,74 @@ const resParser = (res)=>{
 }
 
 $(document).ready(()=>{
-    $.ajax({
-        url: 'graficocaja',
-        method: 'GET',
-        dataType: 'json',
-        success: (data)=>{
-            // console.log(data)
-            document.getElementById('resultados').innerHTML = resParser(data);
-            document.getElementById('clicks').innerHTML = clickParser(data);
-            crearTabla(data.tabla);
-        }
+
+    $.when(
+        $.ajax({
+            url: 'graficocaja',
+            method: 'GET',
+            dataType:'json'
+        }),
+        $.ajax({
+            url: 'actmasusada',
+            method: 'GET',
+            dataType:'json'
+        })
+    ).then(function(resp1,resp2){
+        // console.log(resp1[0])
+        document.getElementById('resultados').innerHTML = resParser(resp1[0]);
+        document.getElementById('clicks').innerHTML = clickParser(resp1[0]);
+        crearTabla(resp1[0].tabla);
+        console.log("Más visitada: "+resp2[0].masUsado);  
+        document.getElementById('masvisitas').innerHTML = "Actividad más visitada: "+resp2[0].masUsado;
+        vistasPorAct(resp2[0].data);
     })
 })
+
+function getRandomColor() {
+    //elementos del sistema hexadecimal
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        //tomo 6 letras/nros aleatorios de los posibles en el sistema hexadecimal
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    console.log(color)
+
+    return color;
+  }
+
+const vistasPorAct = (datos)=>{
+    var miCanvas = document.getElementById("canvas");
+    var ctx = miCanvas.getContext("2d");
+
+    var data2 = {
+        "Módulo 0": 367,
+        "Módulo 1": 277,
+        "Módulo 2": 207,
+        "Módulo 3": 652,
+        "Sintesis del curso": 19
+    }
+    let labels = [];
+    let data = [];
+    let colors = [];
+
+    var elem = "";
+    for (let i = 0; i < datos.length; i++) {
+        elem = datos[i];
+        labels.push(elem.Nombre.split(":")[0]);
+        data.push(elem.CantInteracciones);
+        colors.push(getRandomColor());
+    }
+
+    var pie = new Chart(ctx,{
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "no se",
+                backgroundColor:colors,
+                data: data
+            }]
+        },
+    });
+}

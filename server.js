@@ -91,7 +91,7 @@ app.get('/graficocaja',(req,res)=>{
 			return item.student;
 		})
 		const valores = calculosCaja(interacciones);
-		const rangos = calculosRangos(interacciones,estudiantes);
+		const rangos = calculosRangos(interacciones,estudiantes,valores);
 
 		const tabla = await tabladobleEntrada(rangos);		
 
@@ -99,23 +99,58 @@ app.get('/graficocaja',(req,res)=>{
 	})
 })
 
+app.get('/actmasusada',(req,res)=>{
+	const query = "SELECT `section name` as Nombre,COUNT(`section name`) as CantInteracciones from logs LEFT OUTER JOIN testCHAEA ON logs.email=testCHAEA.email WHERE roleid=5 and testCHAEA.email IS NOT NULL GROUP BY `section name`"
+	conn.query(query,(err,resp)=>{
+		if (err) throw err;
 
-const calculosRangos = (interacciones,estudiantes)=>{
+		let CantInteracciones = resp.map((item)=>{
+			return parseInt(item.CantInteracciones);
+		})
+
+		let nombreActividades = resp.map((item=>{
+			return item.Nombre;
+		}))
+
+		let max = CantInteracciones[0];
+		let x = 0;
+
+		for (let i = 0; i < CantInteracciones.length; i++) {
+			if (CantInteracciones[i]>max){
+				max=CantInteracciones[i];
+				x=i;
+			}
+		}
+		const masUsado=nombreActividades[x];
+		let data = resp;
+		res.send({masUsado,data});
+	})
+});
+
+const calculosRangos = (interacciones,estudiantes,valores)=>{
 	//genero los rangos entre los que deben estar los estudiantes
 	const largo = interacciones.length;
 	const aux = Math.floor((largo+1)/4);
+	// console.log(aux+","+(aux+1))
 	const min = interacciones[0];
 	const max = interacciones[largo-1];
-	const q1 = interacciones[aux-1];
-	const q2 = interacciones[2*aux-1];
-	const q3 = interacciones[3*aux-1];
+	var q1 = interacciones[aux-1];
+	var q2 = interacciones[2*aux-1];
+	var q3 = interacciones[3*aux-1];
 
 	//declaro las variables donde guardo a cada estudiante segun su rango
 	var rango1=[];
 	var rango2=[];
 	var rango3=[];
 	var rango4=[];
-
+	
+	const prueba=true;
+	if(prueba){
+		q1=valores.ref1;
+		q2=valores.ref2;
+		q3=valores.ref3;
+	}
+	
 	var compare = 0;
 	for (let i = 0; i < interacciones.length; i++) {
 		compare = interacciones[i];
@@ -144,7 +179,6 @@ const tabladobleEntrada = (rangos)=>{
 			let estudiantes = resp.map((item)=>{
 				return item.student;
 			})
-	
 			var aux = 0;
 			rangos.forEach(rango => {
 				//cada posicion del vector representa la afinidad con el estilo de aprendizaje.Ej. activo[0] = muy bajo
@@ -164,6 +198,7 @@ const tabladobleEntrada = (rangos)=>{
 					aux+=1;
 				});
 				new_rangos.push([activo,teorico,pragmatico,reflexivo])
+				// console.log("---------")
 			});
 			// console.log(new_rangos)
 			resolve(new_rangos)
@@ -173,6 +208,7 @@ const tabladobleEntrada = (rangos)=>{
 
 const sumoAprendizaje = (tipoAprendizaje,persona)=>{
 	let x = 0;
+	let aux = true;
 	switch (persona) {
 		case "Muy bajo":
 			x=0;
@@ -180,7 +216,7 @@ const sumoAprendizaje = (tipoAprendizaje,persona)=>{
 		case "Bajo":
 			x=1;
 			break;
-		case "Medio":
+		case "Moderado":
 			x=2;
 			break;
 		case "Alto":
@@ -190,9 +226,10 @@ const sumoAprendizaje = (tipoAprendizaje,persona)=>{
 			x=4;
 			break;
 		default:
+			aux=false;
 			break;
 	}
-	tipoAprendizaje[x]+=1;
+	if(aux) tipoAprendizaje[x]+=1;
 	return tipoAprendizaje;
 }
 
