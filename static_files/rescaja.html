@@ -52,12 +52,13 @@
 
 </head>
 <body>
+    <center><h1>Gráfico de caja</h1></center>
     <div style="font-size:16px" id="resultados">Cargando...</div>
     <div class="clicks" id="clicks"></div>
     <div style="font-size: 16px" id="masvisitas">Cargando...</div>
-    <canvas id="canvas" style="display: block; width: 600px;height: 200px;"></canvas>
-    <div id="piechart"></div>
+    <br>
 
+    <center><h1>Cantidad de personas según estilo de aprendizaje</h1></center>
     <table id="tabla" border="1">
         <col>
         <colgroup span="2"></colgroup>
@@ -96,8 +97,16 @@
             <th scope="col">Alto</th>
             <th scope="col">Muy alto</th>
         </tr>
-
     </table>
+    <br>
+
+    <center><h1>Visitas por módulo</h1></center>
+    <div class="chart-container" style="position: relative; height: 250px;width: 500px;display: block;margin: 0 auto">
+        <canvas id="canvas" ></canvas>
+    </div>
+    <div id="piechart"></div>
+    <br>
+
 </body>
 
 <footer>

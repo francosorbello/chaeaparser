@@ -144,13 +144,13 @@ const calculosRangos = (interacciones,estudiantes,valores)=>{
 	var rango3=[];
 	var rango4=[];
 	
-	const prueba=true;
+	const prueba=false;
 	if(prueba){
 		q1=valores.ref1;
 		q2=valores.ref2;
 		q3=valores.ref3;
 	}
-	
+
 	var compare = 0;
 	for (let i = 0; i < interacciones.length; i++) {
 		compare = interacciones[i];
@@ -257,3 +257,27 @@ calculosCaja = (interacciones)=>{
 
 	return {min,max, q1, q3,mediana,media, rango, ref1,ref2,ref3,ref4}
 }
+
+app.get("/personasxestilo",(req,res)=>{
+	const query = "SELECT DISTINCT logs.student, activo,teorico,pragmatico, reflexivo FROM logs,testCHAEA WHERE logs.email = testCHAEA.email";
+	conn.query(query,(err,resp)=>{
+		if (err) throw err;
+		
+
+		var activo = [0,0,0,0,0];
+		var teorico = [0,0,0,0,0];
+		var pragmatico = [0,0,0,0,0];
+		var reflexivo = [0,0,0,0,0];
+		rango.forEach(persona => {
+			if (estudiantes.includes(persona)) {
+				// console.log(persona+": "+resp[aux].activo+","+resp[aux].teorico+","+resp[aux].pragmatico+","+resp[aux].reflexivo)
+				activo=sumoAprendizaje(activo,resp[aux].activo);
+				teorico=sumoAprendizaje(teorico,resp[aux].teorico);
+				pragmatico=sumoAprendizaje(pragmatico,resp[aux].pragmatico);
+				reflexivo=sumoAprendizaje(reflexivo,resp[aux].reflexivo);
+			}
+			aux+=1;
+		});
+		
+	})
+})

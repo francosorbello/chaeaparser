@@ -79,16 +79,14 @@ $(document).ready(()=>{
     })
 })
 
-function getRandomColor() {
+function getRandomColor(cant) {
     //elementos del sistema hexadecimal
     var letters = '0123456789ABCDEF';
     var color = '#';
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < cant; i++) {
         //tomo 6 letras/nros aleatorios de los posibles en el sistema hexadecimal
         color += letters[Math.floor(Math.random() * 16)];
     }
-    console.log(color)
-
     return color;
   }
 
@@ -96,13 +94,6 @@ const vistasPorAct = (datos)=>{
     var miCanvas = document.getElementById("canvas");
     var ctx = miCanvas.getContext("2d");
 
-    var data2 = {
-        "Módulo 0": 367,
-        "Módulo 1": 277,
-        "Módulo 2": 207,
-        "Módulo 3": 652,
-        "Sintesis del curso": 19
-    }
     let labels = [];
     let data = [];
     let colors = [];
@@ -112,7 +103,7 @@ const vistasPorAct = (datos)=>{
         elem = datos[i];
         labels.push(elem.Nombre.split(":")[0]);
         data.push(elem.CantInteracciones);
-        colors.push(getRandomColor());
+        colors.push(getRandomColor(datos.length));
     }
 
     var pie = new Chart(ctx,{
@@ -120,7 +111,6 @@ const vistasPorAct = (datos)=>{
         data: {
             labels: labels,
             datasets: [{
-                label: "no se",
                 backgroundColor:colors,
                 data: data
             }]
