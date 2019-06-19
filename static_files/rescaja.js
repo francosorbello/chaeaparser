@@ -1,12 +1,7 @@
-
-const clickParser = (res)=>{
-    return "<br>"+res.interacciones.join(',')+"<br>"
-}
-
-
-const crearTabla = (rangos)=>{
-    //como los valores estan guardados en un array de 3 dimensiones, debo sacarlos y dejarlos en un
-    //unico array
+//como los valores estan guardados en un array de 3 dimensiones, debo sacarlos y dejarlos en un unico array
+const crearTabla = (rangos,limites)=>{
+    //obtengo los titulos para los rangos
+    let titulos = displayRangos(limites);
     for (let i = 0; i < rangos.length; i++) {
         const tipo = rangos[i];
         //en nros voy a guardar los valores de cada rango
@@ -16,19 +11,34 @@ const crearTabla = (rangos)=>{
                 nros.push(elem)
             })
         })
-        añadirFila(nros,i+1)
+        añadirFila(nros,titulos[i],"tablagen")
     }
 
 }
+const crearTabla2 = (interacciones,titulos)=>{
+    for (let i = 0; i < interacciones.length; i++) {
+        añadirFila(interacciones[i],titulos[i],"tablaact")
+        
+    }
+}
 
-const añadirFila=(texto,nroRango)=>{
+const displayRangos = (limites)=>{
+    return [
+        "Entre "+limites.min+" y "+limites.q1,
+        "Entre "+limites.q1+" y "+limites.q2,
+        "Entre "+limites.q2+" y "+limites.q3,
+        "Entre "+limites.q3+" y "+limites.max,
+    ]
+}
+
+const añadirFila=(texto,titulo,id)=>{
     //obtengo la tabla de la pagina
-    var tabla = document.getElementById("tabla");
+    var tabla = document.getElementById(id);
     //obtengo la ultima fila
     var newRow = tabla.insertRow(tabla.rows.length);
 
     //inserto celda con el nombre de la fila
-    var celda = newRow.insertCell(0).innerHTML="<b>Rango "+nroRango+"</b>"
+    var celda = newRow.insertCell(0).innerHTML="<b>"+titulo+"</b>"
     //inserto celdas con los valores
     texto.forEach(element => {
         //el -1 indica que añada una celda en la ultima posicion
@@ -37,23 +47,6 @@ const añadirFila=(texto,nroRango)=>{
     });
 }
 
-const resParser = (res)=>{
-    //esta funcion extrae y muestra los datos relevantes obtenidos(como el minimo,el maximo, etc)
-    const min = "<b>Valor mínimo: </b>"+res.valores.min+"<br>";
-    const max = "<b>Valor máximo: </b>"+res.valores.max+"<br>";
-    const q1  = "<b>Cuartil 1: </b>"+res.valores.q1+"<br>";
-    const q3  = "<b>Cuartil 3: </b>"+res.valores.q3+"<br>";
-    const mediana = "<b>Mediana: </b>"+res.valores.mediana+"<br>";
-    const media = "<b>Media: </b>"+res.valores.media+"<br>";
-    const rango = "<b>Rango: </b>"+res.valores.rango+"<br>";
-    const ref1 = "<b>Referencia 1: </b>"+res.valores.ref1+"<br>";
-    const ref2 = "<b>Referencia 2: </b>"+res.valores.ref2+"<br>";
-    const ref3 = "<b>Referencia 3: </b>"+res.valores.ref3+"<br>";
-    const ref4 = "<b>Referencia 4: </b>"+res.valores.ref4+"<br>";
-
-    const rel_info = min+max+q1+q3+mediana+media+rango+ref1+ref2+ref3+ref4;        
-    return rel_info;
-}
 
 $(document).ready(()=>{
 
@@ -67,15 +60,16 @@ $(document).ready(()=>{
             url: 'actmasusada',
             method: 'GET',
             dataType:'json'
+        }),
+        $.ajax({
+            url: 'chaeaxactividad',
+            method: 'GET',
+            dataType: 'json'
         })
-    ).then(function(resp1,resp2){
-        // console.log(resp1[0])
-        document.getElementById('resultados').innerHTML = resParser(resp1[0]);
-        document.getElementById('clicks').innerHTML = clickParser(resp1[0]);
-        crearTabla(resp1[0].tabla);
-        console.log("Más visitada: "+resp2[0].masUsado);  
-        document.getElementById('masvisitas').innerHTML = "Actividad más visitada: "+resp2[0].masUsado;
+    ).then(function(resp1,resp2,resp3){
+        crearTabla(resp1[0].tabla,resp1[0].limites);
         vistasPorAct(resp2[0].data);
+        crearTabla2(resp3[0].clicks,resp3[0].titulos)
     })
 })
 

@@ -25,52 +25,25 @@
 		</div>
 	</nav>
     <title>Resultados gráfico de caja</title>
-
-    <style>
-        div.clicks{
-            width: 100%;
-            word-wrap: break-word;
-            font-size: 17px;
-        }
-        table {
-        font-family: arial, sans-serif;
-        border-collapse: collapse;
-        font-size: 13px;
-        width: 100%;
-        }
-
-        td, th {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 8px;
-        }
-
-        tr:nth-child(even) {
-        background-color: #dddddd;
-        }
-    </style>
-
+    <link rel="stylesheet" type="text/css" href="rescaja.css">
 </head>
 <body>
-    <center><h1>Gráfico de caja</h1></center>
-    <div style="font-size:16px" id="resultados">Cargando...</div>
-    <div class="clicks" id="clicks"></div>
-    <div style="font-size: 16px" id="masvisitas">Cargando...</div>
     <br>
-
     <center><h1>Cantidad de personas según estilo de aprendizaje</h1></center>
-    <table id="tabla" border="1">
+    <table id="tablagen" border="1">
         <col>
         <colgroup span="2"></colgroup>
         <colgroup span="2"></colgroup>
 
         <tr>
-            <td rowspan="2"></td>
+            <td rowspan="2" class="crossed">
+                <p style="text-align: right">Estilo</p>
+                <span style="padding-right: 25px">Interacciones</span>
+            </td>
             <th colspan="5" scope="colgroup">Activo</th>
             <th colspan="5" scope="colgroup">Teórico</th>
             <th colspan="5" scope="colgroup">Pragmático</th>
             <th colspan="5" scope="colgroup">Reflexivo</th>
-
         </tr>
         <tr>
             <th scope="col">Muy bajo</th>
@@ -99,6 +72,49 @@
         </tr>
     </table>
     <br>
+
+    <center><h1>Interacciones por actividad según estilo de aprendizaje</h1></center>
+    <table id="tablaact" border="1">
+        <col>
+        <colgroup span="2"></colgroup>
+        <colgroup span="2"></colgroup>
+
+        <tr>
+            <td rowspan="2" class="crossed">
+                <p style="text-align: right">Estilo</p>
+                <span style="padding-right: 25px">Actividades</span>
+            </td>
+            <th colspan="5" scope="colgroup">Activo</th>
+            <th colspan="5" scope="colgroup">Teórico</th>
+            <th colspan="5" scope="colgroup">Pragmático</th>
+            <th colspan="5" scope="colgroup">Reflexivo</th>
+        </tr>
+        <tr>
+            <th scope="col">Muy bajo</th>
+            <th scope="col">Bajo</th>
+            <th scope="col">Medio</th>
+            <th scope="col">Alto</th>
+            <th scope="col">Muy alto</th>
+
+            <th scope="col">Muy bajo</th>
+            <th scope="col">Bajo</th>
+            <th scope="col">Medio</th>
+            <th scope="col">Alto</th>
+            <th scope="col">Muy alto</th>
+
+            <th scope="col">Muy bajo</th>
+            <th scope="col">Bajo</th>
+            <th scope="col">Medio</th>
+            <th scope="col">Alto</th>
+            <th scope="col">Muy alto</th>
+
+            <th scope="col">Muy bajo</th>
+            <th scope="col">Bajo</th>
+            <th scope="col">Medio</th>
+            <th scope="col">Alto</th>
+            <th scope="col">Muy alto</th>
+        </tr>
+    </table>
 
     <center><h1>Visitas por módulo</h1></center>
     <div class="chart-container" style="position: relative; height: 250px;width: 500px;display: block;margin: 0 auto">

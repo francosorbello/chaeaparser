@@ -1,0 +1,46 @@
+div.clicks{
+    width: 100%;
+    word-wrap: break-word;
+    font-size: 17px;
+}
+table {
+font-family: arial, sans-serif;
+border-collapse: collapse;
+font-size: 13px;
+width: 100%;
+overflow: hidden;
+}
+
+td, th {
+position: relative;
+border: 1px solid #dddddd;
+text-align: left;
+padding: 8px;
+}
+
+table td.crossed{
+/* pone transparente entre el 50% +-1 del espacio.El 1 pixel que queda es la linea negra.Pretty clever */
+background-image: linear-gradient(to bottom left,  transparent calc(50% - 1px), black, transparent calc(50% + 1px)); 
+}
+tr:nth-child(even) {
+background-color: #dddddd;
+}
+
+tr:hover{
+    background-color: #ffff99;
+}
+td:hover{
+    background-color: rgb(255, 255, 78);   
+}
+/* :after representa el elemento siguiente al que estoy estilizando */
+td:hover::after,
+th:hover::after {
+  content: "";
+  position: absolute;
+  background-color: #ffa;
+  left: 0;
+  top: -5000px;
+  height: 10000px;
+  width: 100%;
+  z-index: -1;
+} 

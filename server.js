@@ -77,9 +77,8 @@ app.post('/insertlogs', async (req,res)=>{
 	}
 })
 
-
+//con esta query obtengo la cantidad de interacciones de cada estudiante para el curso en general
 const bigquery = "SELECT student, COUNT(`student`) as CantInteracciones from logs LEFT OUTER JOIN testCHAEA ON `logs`.email = testCHAEA.email WHERE roleid=5 and testCHAEA.email IS NOT NULL GROUP BY `student` ORDER BY CantInteracciones"
-// "SkELECT COUNT(`student`) as CantInteracciones from logs WHERE roleid=5 GROUP BY `student` ORDER BY CantInteracciones"
 app.get('/graficocaja',(req,res)=>{
 	conn.query(bigquery,async (req,resp)=>{
 		//primero paso los resultados a enteros.
@@ -90,75 +89,42 @@ app.get('/graficocaja',(req,res)=>{
 		let estudiantes = resp.map((item)=>{
 			return item.student;
 		})
-		const valores = calculosCaja(interacciones);
-		const rangos = calculosRangos(interacciones,estudiantes,valores);
+		const limites = calculoLimites(interacciones);
+		const rangos = calculosRangos(interacciones,estudiantes);
 
 		const tabla = await tabladobleEntrada(rangos);		
-
-		res.send({interacciones, valores, tabla})
+		res.send({limites,tabla})
 	})
 })
 
-app.get('/actmasusada',(req,res)=>{
-	const query = "SELECT `section name` as Nombre,COUNT(`section name`) as CantInteracciones from logs LEFT OUTER JOIN testCHAEA ON logs.email=testCHAEA.email WHERE roleid=5 and testCHAEA.email IS NOT NULL GROUP BY `section name`"
-	conn.query(query,(err,resp)=>{
-		if (err) throw err;
-
-		let CantInteracciones = resp.map((item)=>{
-			return parseInt(item.CantInteracciones);
-		})
-
-		let nombreActividades = resp.map((item=>{
-			return item.Nombre;
-		}))
-
-		let max = CantInteracciones[0];
-		let x = 0;
-
-		for (let i = 0; i < CantInteracciones.length; i++) {
-			if (CantInteracciones[i]>max){
-				max=CantInteracciones[i];
-				x=i;
-			}
-		}
-		const masUsado=nombreActividades[x];
-		let data = resp;
-		res.send({masUsado,data});
-	})
-});
-
-const calculosRangos = (interacciones,estudiantes,valores)=>{
+const calculoLimites = (interacciones)=>{
 	//genero los rangos entre los que deben estar los estudiantes
 	const largo = interacciones.length;
 	const aux = Math.floor((largo+1)/4);
-	// console.log(aux+","+(aux+1))
 	const min = interacciones[0];
 	const max = interacciones[largo-1];
 	var q1 = interacciones[aux-1];
 	var q2 = interacciones[2*aux-1];
 	var q3 = interacciones[3*aux-1];
+	return {min,max,q1,q2,q3}
+}
 
+const calculosRangos = (interacciones,estudiantes)=>{
+	var limites = calculoLimites(interacciones)
 	//declaro las variables donde guardo a cada estudiante segun su rango
 	var rango1=[];
 	var rango2=[];
 	var rango3=[];
 	var rango4=[];
 	
-	const prueba=false;
-	if(prueba){
-		q1=valores.ref1;
-		q2=valores.ref2;
-		q3=valores.ref3;
-	}
-
 	var compare = 0;
 	for (let i = 0; i < interacciones.length; i++) {
 		compare = interacciones[i];
-		if (compare<q1){
+		if (compare<limites.q1){
 			rango1.push(estudiantes[i]);
-		} else if (compare<q2){
+		} else if (compare<limites.q2){
 			rango2.push(estudiantes[i]);
-		} else if (compare<q3){
+		} else if (compare<limites.q3){
 			rango3.push(estudiantes[i]);
 		} else{
 			rango4.push(estudiantes[i]);
@@ -168,7 +134,6 @@ const calculosRangos = (interacciones,estudiantes,valores)=>{
 }
 
 const tabladobleEntrada = (rangos)=>{
-
 	var new_rangos = []
 	const query = "SELECT DISTINCT logs.student, activo,teorico,pragmatico, reflexivo FROM logs,testCHAEA WHERE logs.email = testCHAEA.email";
 	return new Promise((resolve,reject)=>{
@@ -189,7 +154,6 @@ const tabladobleEntrada = (rangos)=>{
 				var reflexivo = [0,0,0,0,0];
 				rango.forEach(persona => {
 					if (estudiantes.includes(persona)) {
-						// console.log(persona+": "+resp[aux].activo+","+resp[aux].teorico+","+resp[aux].pragmatico+","+resp[aux].reflexivo)
 						activo=sumoAprendizaje(activo,resp[aux].activo);
 						teorico=sumoAprendizaje(teorico,resp[aux].teorico);
 						pragmatico=sumoAprendizaje(pragmatico,resp[aux].pragmatico);
@@ -198,9 +162,7 @@ const tabladobleEntrada = (rangos)=>{
 					aux+=1;
 				});
 				new_rangos.push([activo,teorico,pragmatico,reflexivo])
-				// console.log("---------")
 			});
-			// console.log(new_rangos)
 			resolve(new_rangos)
 		})	
 	})
@@ -233,36 +195,38 @@ const sumoAprendizaje = (tipoAprendizaje,persona)=>{
 	return tipoAprendizaje;
 }
 
+app.get('/actmasusada',(req,res)=>{
+	const query = "SELECT `section name` as Nombre,COUNT(`section name`) as CantInteracciones from logs LEFT OUTER JOIN testCHAEA ON logs.email=testCHAEA.email WHERE roleid=5 and testCHAEA.email IS NOT NULL GROUP BY `section name`"
+	conn.query(query,(err,resp)=>{
+		if (err) throw err;
 
+		let CantInteracciones = resp.map((item)=>{
+			return parseInt(item.CantInteracciones);
+		})
 
-calculosCaja = (interacciones)=>{
-	const largo = interacciones.length;
-	const min = interacciones[0];
-	const max = interacciones[largo-1];
-	var n = 0;
-	interacciones.forEach(element => {
-		n += element;
-	});
-	var aux = Math.floor((largo+1)/4);
-	const q1 = interacciones[aux-1];
-	const q3 = interacciones[3*aux-1];
-	aux = Math.floor((largo+1)/2);
-	const mediana = interacciones[aux-1]; 
-	const media  = n/largo; 
-	const rango = q3-q1; //rango intercuartilico
-	const ref1 = q1 - 3*rango;
-	const ref2 = q1 - 1.5*rango;
-	const ref3 = q3 + 1.5*rango;
-	const ref4 = q3 + 3*rango;
+		let nombreActividades = resp.map((item=>{
+			return item.Nombre;
+		}))
 
-	return {min,max, q1, q3,mediana,media, rango, ref1,ref2,ref3,ref4}
-}
+		let max = CantInteracciones[0];
+		let x = 0;
+
+		for (let i = 0; i < CantInteracciones.length; i++) {
+			if (CantInteracciones[i]>max){
+				max=CantInteracciones[i];
+				x=i;
+			}
+		}
+		const masUsado=nombreActividades[x];
+		let data = resp;
+		res.send({masUsado,data});
+	})
+});
 
 app.get("/personasxestilo",(req,res)=>{
 	const query = "SELECT DISTINCT logs.student, activo,teorico,pragmatico, reflexivo FROM logs,testCHAEA WHERE logs.email = testCHAEA.email";
 	conn.query(query,(err,resp)=>{
 		if (err) throw err;
-		
 
 		var activo = [0,0,0,0,0];
 		var teorico = [0,0,0,0,0];
@@ -281,3 +245,128 @@ app.get("/personasxestilo",(req,res)=>{
 		
 	})
 })
+
+app.get("/chaeaxactividad", (req,res)=>{
+	conn.query("select DISTINCT `module name` from logs",async (err,resp)=>{
+		const actividades =	resp.map(item=>{
+			return item["module name"];
+		})
+		let clicks = [];
+		for (let i = 0; i < actividades.length; i++) {
+			let new_click = await personasxactividad(actividades[i]);
+			clicks.push(new_click);
+		}
+		var titulos = extraerNombres(actividades);
+		res.send({titulos,clicks});
+	})
+})
+
+const extraerNombres = (actividades)=>{
+	return actividades.map((act)=>{
+		var pos = act.indexOf("title");
+		if(pos !== -1){
+			var titulo=""
+			var comas=0;
+			while(comas<2){
+				if(act[pos]=='"'){
+					comas+=1;
+				}
+				titulo += act[pos];
+				pos+=1;
+			}
+			return titulo
+		} else{
+			return act
+		}
+	})
+}
+
+const personasxactividad = (actividad)=>{
+	return new Promise((resolve,reject)=>{
+		const query='SELECT student, logs.`module name`,logs.email, COUNT(student) as cant from logs LEFT OUTER JOIN testCHAEA ON logs.email = testCHAEA.email WHERE roleid=5 and `module name`=? and testCHAEA.email IS NOT NULL GROUP BY student ORDER BY cant'
+		conn.query(query,actividad,async (err,resp)=>{
+			if (err) throw err;
+	
+			const tests = await getTests();
+	
+			let interacciones = resp.map((item)=>{
+				return parseInt(item.cant);
+			})
+			let estudiantes = resp.map((item)=>{
+				return item.student;
+			})
+			let usersTests = tests.map((item)=>{
+				return item.student
+			})
+			let clicks = clickxact(estudiantes,interacciones,usersTests,tests)	
+			resolve(clicks)
+		})
+	})
+}
+
+const getTests = () =>{
+	return new Promise((resolve,reject)=>{
+		const query = "SELECT DISTINCT logs.student, activo,teorico,pragmatico, reflexivo FROM logs,testCHAEA WHERE logs.email = testCHAEA.email";
+		conn.query(query,(err,resp)=>{
+			if(err) {
+				reject(err);
+				throw err;
+			}
+			resolve(resp)
+		})		
+	})
+}
+const clickxact = (alumnos,interacciones,test_usr,test_res)=>{
+	//tengo que tomar cada persona, fijarme sus estilos y multiplicar la cant de interacciones por estilo matcheado
+	var pos = -1;
+	var estilos = "";
+	let x = 0;
+	//creo un array que almacena los clicks por estilo. Es de 20 porque 5 posiciones representan un estilo con sus distintos niveles.
+	var clicks = Array(20).fill(0);
+	for (let i = 0; i < alumnos.length; i++) {
+		pos = test_usr.indexOf(alumnos[i]);
+		if(pos !== -1){
+			estilos = test_res[pos];
+			// console.log(alumnos[i]+","+interacciones[i]+" interacciones; "+estilos.activo+" ,"+estilos.teorico+" ,"+estilos.pragmatico+", "+estilos.reflexivo)
+			//activo
+			x = getPos(0,estilos.activo);
+			clicks[x] += interacciones[i];
+			//teorico
+			x = getPos(5,estilos.teorico);
+			clicks[x] += interacciones[i];
+			//pragmatico
+			x = getPos(10,estilos.pragmatico);
+			clicks[x] += interacciones[i];
+			//reflexivo
+			x = getPos(15,estilos.reflexivo);
+			clicks[x] += interacciones[i];
+		}
+	}
+	return clicks
+}
+
+const getPos = (posIni,estilo)=>{
+	let aux = true;
+	let x = posIni;
+	switch (estilo) {
+		case "Muy bajo":
+			x+=0;
+			break;
+		case "Bajo":
+			x+=1;
+			break;
+		case "Moderado":
+			x+=2;
+			break;
+		case "Alto":
+			x+=3;
+			break;
+		case "Muy alto":
+			x+=4;
+			break;
+		default:
+			aux=false;
+			break;
+	}
+	if(aux) return x;
+}
