@@ -35,6 +35,19 @@ app.get('/', (req,res)=>{
 	res.sendFile('./static_files/index.html')
 })
 
+app.post('/insertchaea',(req,res)=>{
+	var data = req.body.logs[0];
+	//quito la informacion que no guardo, como el nombre de user
+	var ins_data = data.map(item=>{
+		return [item[2],item[1],item[3],item[4],item[5],item[6]]
+	})
+	conn.query('INSERT INTO testCHAEA (tiempo,email,activo,teorico,pragmatico,reflexivo) VALUES ?',[ins_data],(err,resp)=>{
+		if (err) throw err;
+
+		console.log("Filas afectadas: "+resp.affectedRows)
+		res.send({success: true})
+	})
+})
 const bigInsert = (data)=>{
 	console.log("Comenzando super insert...")
 	return new Promise((res,rej)=>{
@@ -44,7 +57,7 @@ const bigInsert = (data)=>{
 			} else {
 				console.log("Filas afectadas: "+response.affectedRows);
 				res({isWorking: true})
-				res.toString			}
+			}
 		});
 	})
 }

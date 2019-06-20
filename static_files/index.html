@@ -4,11 +4,11 @@
 	<title>CHAEAParser V1</title>
 
 	<link rel="stylesheet" type="text/css" href="styles.css">
+	<script src="jquery-3.3.1.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<script src="jquery-3.3.1.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
@@ -19,9 +19,9 @@
 				<a class="nav-link" href="rescaja.html">Resultados</a>
 			</li>
 			<li class="nav-item">
-					<a class="nav-link" href="docs.html">Documentación</a>
-				</li>
-			</ul>
+				<a class="nav-link" href="docs.html">Documentación</a>
+			</li>
+		</ul>
 		</div>
 	</nav>
 </head>
@@ -38,7 +38,7 @@
 						<div class="col-md-2 d-flex flex-row-reverse"><p><a href="docs.html"><i class="fa fa-question-circle" style="font-size:24px;color:#343A40"></i></a></p></div>
 					</div>
 					<div class="row">
-						<div class="col-md-10"> <input type="file" id="json" /> </div>
+						<div class="col-md-10"> <input type="file" id="logs" /> </div>
 						<div class="col-md-2 d-flex flex-row-reverse">
 							<div id="loader1" class="spinner-border" style="width: 24px;height: 24px;display: none"  role="status"></div>
 							<i id="loaded1" class="fa fa-check-circle" style="font-size:24px;color: #343A40;display: none"></i>
@@ -51,8 +51,15 @@
 				<div class="row">						
 						<div class="col-md-10"><h4>Inserta los resultados del test CHAEA:</h4></div>
 						<div class="col-md-2 d-flex flex-row-reverse"><p><a href="docs.html"><i class="fa fa-question-circle" style="font-size:24px;color:#343A40"></i></a></p></div>
+				</div>
+				<div class="row">
+					<div class="col-md-10"> <input type="file" id="chaea" /> </div>
+					<div class="col-md-2 d-flex flex-row-reverse">
+						<div id="loader2" class="spinner-border" style="width: 24px;height: 24px;display: none"  role="status"></div>
+						<i id="loaded2" class="fa fa-check-circle" style="font-size:24px;color: #343A40;display: none"></i>
 					</div>
-			<input type="file" id="try" name="PRUEBA" />
+				</div>
+
 			</div>
 			<br>
 			<div class="d-flex justify-content-center">

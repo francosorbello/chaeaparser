@@ -1,5 +1,5 @@
 //como los valores estan guardados en un array de 3 dimensiones, debo sacarlos y dejarlos en un unico array
-const crearTabla = (rangos,limites)=>{
+const crearTablaGEN = (rangos,limites)=>{
     //obtengo los titulos para los rangos
     let titulos = displayRangos(limites);
     for (let i = 0; i < rangos.length; i++) {
@@ -15,7 +15,7 @@ const crearTabla = (rangos,limites)=>{
     }
 
 }
-const crearTabla2 = (interacciones,titulos)=>{
+const crearTablaACT = (interacciones,titulos)=>{
     for (let i = 0; i < interacciones.length; i++) {
         if(titulos[i]=="" || titulos[i]==" "){
             titulos[i]='<i><span style="color: #cccccc">Sin título</span></i>'
@@ -50,7 +50,6 @@ const añadirFila=(texto,titulo,id)=>{
     });
 }
 
-
 $(document).ready(()=>{
     $.when(
         $.ajax({
@@ -64,7 +63,7 @@ $(document).ready(()=>{
             dataType: 'json'
         })
     ).then(function(resp1,resp2){
-        crearTabla(resp1[0].tabla,resp1[0].limites);
-        crearTabla2(resp2[0].clicks,resp2[0].titulos)
+        crearTablaGEN(resp1[0].tabla,resp1[0].limites);
+        crearTablaACT(resp2[0].clicks,resp2[0].titulos)
     })
 })
