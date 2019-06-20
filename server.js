@@ -195,56 +195,6 @@ const sumoAprendizaje = (tipoAprendizaje,persona)=>{
 	return tipoAprendizaje;
 }
 
-app.get('/actmasusada',(req,res)=>{
-	const query = "SELECT `section name` as Nombre,COUNT(`section name`) as CantInteracciones from logs LEFT OUTER JOIN testCHAEA ON logs.email=testCHAEA.email WHERE roleid=5 and testCHAEA.email IS NOT NULL GROUP BY `section name`"
-	conn.query(query,(err,resp)=>{
-		if (err) throw err;
-
-		let CantInteracciones = resp.map((item)=>{
-			return parseInt(item.CantInteracciones);
-		})
-
-		let nombreActividades = resp.map((item=>{
-			return item.Nombre;
-		}))
-
-		let max = CantInteracciones[0];
-		let x = 0;
-
-		for (let i = 0; i < CantInteracciones.length; i++) {
-			if (CantInteracciones[i]>max){
-				max=CantInteracciones[i];
-				x=i;
-			}
-		}
-		const masUsado=nombreActividades[x];
-		let data = resp;
-		res.send({masUsado,data});
-	})
-});
-
-app.get("/personasxestilo",(req,res)=>{
-	const query = "SELECT DISTINCT logs.student, activo,teorico,pragmatico, reflexivo FROM logs,testCHAEA WHERE logs.email = testCHAEA.email";
-	conn.query(query,(err,resp)=>{
-		if (err) throw err;
-
-		var activo = [0,0,0,0,0];
-		var teorico = [0,0,0,0,0];
-		var pragmatico = [0,0,0,0,0];
-		var reflexivo = [0,0,0,0,0];
-		rango.forEach(persona => {
-			if (estudiantes.includes(persona)) {
-				// console.log(persona+": "+resp[aux].activo+","+resp[aux].teorico+","+resp[aux].pragmatico+","+resp[aux].reflexivo)
-				activo=sumoAprendizaje(activo,resp[aux].activo);
-				teorico=sumoAprendizaje(teorico,resp[aux].teorico);
-				pragmatico=sumoAprendizaje(pragmatico,resp[aux].pragmatico);
-				reflexivo=sumoAprendizaje(reflexivo,resp[aux].reflexivo);
-			}
-			aux+=1;
-		});
-		
-	})
-})
 
 app.get("/chaeaxactividad", (req,res)=>{
 	conn.query("select DISTINCT `module name` from logs",async (err,resp)=>{

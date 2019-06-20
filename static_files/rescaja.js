@@ -17,6 +17,9 @@ const crearTabla = (rangos,limites)=>{
 }
 const crearTabla2 = (interacciones,titulos)=>{
     for (let i = 0; i < interacciones.length; i++) {
+        if(titulos[i]=="" || titulos[i]==" "){
+            titulos[i]='<i><span style="color: #cccccc">Sin título</span></i>'
+        }
         añadirFila(interacciones[i],titulos[i],"tablaact")
         
     }
@@ -49,15 +52,9 @@ const añadirFila=(texto,titulo,id)=>{
 
 
 $(document).ready(()=>{
-
     $.when(
         $.ajax({
             url: 'graficocaja',
-            method: 'GET',
-            dataType:'json'
-        }),
-        $.ajax({
-            url: 'actmasusada',
             method: 'GET',
             dataType:'json'
         }),
@@ -66,48 +63,8 @@ $(document).ready(()=>{
             method: 'GET',
             dataType: 'json'
         })
-    ).then(function(resp1,resp2,resp3){
+    ).then(function(resp1,resp2){
         crearTabla(resp1[0].tabla,resp1[0].limites);
-        vistasPorAct(resp2[0].data);
-        crearTabla2(resp3[0].clicks,resp3[0].titulos)
+        crearTabla2(resp2[0].clicks,resp2[0].titulos)
     })
 })
-
-function getRandomColor(cant) {
-    //elementos del sistema hexadecimal
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < cant; i++) {
-        //tomo 6 letras/nros aleatorios de los posibles en el sistema hexadecimal
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  }
-
-const vistasPorAct = (datos)=>{
-    var miCanvas = document.getElementById("canvas");
-    var ctx = miCanvas.getContext("2d");
-
-    let labels = [];
-    let data = [];
-    let colors = [];
-
-    var elem = "";
-    for (let i = 0; i < datos.length; i++) {
-        elem = datos[i];
-        labels.push(elem.Nombre.split(":")[0]);
-        data.push(elem.CantInteracciones);
-        colors.push(getRandomColor(datos.length));
-    }
-
-    var pie = new Chart(ctx,{
-        type: 'pie',
-        data: {
-            labels: labels,
-            datasets: [{
-                backgroundColor:colors,
-                data: data
-            }]
-        },
-    });
-}

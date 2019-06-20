@@ -13,15 +13,17 @@ overflow: hidden;
 
 td, th {
 position: relative;
-border: 1px solid #dddddd;
+border: 1px solid #888585;
 text-align: left;
 padding: 8px;
 }
 
 table td.crossed{
 /* pone transparente entre el 50% +-1 del espacio.El 1 pixel que queda es la linea negra.Pretty clever */
+border: 1px solid #888585;
 background-image: linear-gradient(to bottom left,  transparent calc(50% - 1px), black, transparent calc(50% + 1px)); 
 }
+
 tr:nth-child(even) {
 background-color: #dddddd;
 }
