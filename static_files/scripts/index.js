@@ -38,3 +38,17 @@
 	
 
 }());
+$(document).ready(()=>{
+	//activo los tooltips
+	$('[data-toggle="tooltip"]').tooltip(); 
+	
+	$.ajax({
+		url:'checkdb',
+		method: 'GET',
+		success: (data)=>{
+			if(data.vacio){
+				document.getElementById("resultados").style.pointerEvents = "auto";
+			}
+		}
+	})
+})

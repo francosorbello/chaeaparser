@@ -61,6 +61,44 @@ const bigInsert = (data)=>{
 		});
 	})
 }
+const checking = (tabla)=>{
+	return new Promise((resolve,reject)=>{
+		conn.query("select * from ??",[tabla],(err,res)=>{
+			if (err) throw err;
+			console.log(tabla+": "+res.length)
+			if(res == ""){
+				resolve(true);
+			}
+			resolve(false)
+		})
+	})
+}
+
+const cleaning = (tabla)=>{
+	conn.query("DELETE FROM ??",[tabla],(err,res)=>{
+		if (err) throw err;
+
+		console.log("Filas afectadas: "+res.affectedRows)
+	})
+} 
+
+app.delete('/cleartables',(req,res)=>{
+	cleaning("logs");
+	cleaning("testCHAEA");
+	res.send({success: true})
+})
+
+app.get('/checkdb',async (req,res)=>{
+	const texto = "testCHAEA"
+	const logs = await checking("logs")
+	const test = await checking("testCHAEA")
+
+	if(!(logs && test)){
+		res.send({vacio: true})
+	}else {
+		res.send({vacio: false})
+	}
+})
 
 app.post('/insertlogs', async (req,res)=>{
 	var data = req.body.logs;

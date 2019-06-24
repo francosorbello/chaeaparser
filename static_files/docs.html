@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CHAEAParser V1</title>
+	<title>CHAEAParser V1</title>
+	
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
@@ -23,6 +25,28 @@
 	</nav>
 </head>
 <body>
-    
+	<br>
+	<center><h2>Obtener resultados del Test CHAEA en .json</h2></center>
+	<div style="padding-left: 5px">
+		<h4>1. Crear el Test</h4>
+		<p>Añada una actividad a Moodle que siga el siguiente esquema:</p>
+		<img src="img/CargaDeResultadoTest.jpg" alt="Formulario Test CHAEA" style="border: 1px solid #343A40">
+		<p>
+			Este cuestionario deberá ser llenado por los alumnos, quienes deben completarlo con los resultados
+			que obtuvieron al realizar el test CHAEA.
+		</p>
+		<h4>2. Exportar los resultados</h4>
+		<p>
+			Una vez que los alumnos hayan completado el formulario, ingrese a la pestaña de respuestas de la
+			actividad.<br> La manera de acceder a esta pestaña puede variar según la versión de Moodle que esté utilizando.
+		</p>
+		<img src="img/VerRespuestasTest.jpg" alt="Pestaña Mostrar Respuestas" style="border: 1px solid #343A40">
+		<p>
+			A continuación, verá una opción llamada "Descargar datos de tabla como". Despliegue la lista y selecciones "Javascript Object Notation".
+			<br>Finalmente, descargue el archivo presionando "Descargar". 
+		</p>
+		<img src="img/ExportacionTest.jpg" alt="Exportar JSON" style="border: 1px solid #343A40">
+		<p></p>
+	</div>
 </body>
 </html>
