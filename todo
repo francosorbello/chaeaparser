@@ -1,7 +1,4 @@
-1. Subir los logs y los resultados del test a la base de datos
-2. Parsear logs y tests y llenar las tablas
-3. obtener tabla de doble entrada
-
-a corregir
-DONE-algunos mails estan con mayusc(solucionar con lower)
+-algunos mails estan con mayusc(solucionar con lower) DONE
 -algunos tests estan repetidos
+-Cada vez que se quiere hacer un nuevo test se debe limpiar la base de datos manualmente
+-Falta la documentación de cómo exportar los logs a json
