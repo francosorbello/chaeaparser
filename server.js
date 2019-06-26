@@ -116,6 +116,19 @@ app.post('/insertlogs', async (req,res)=>{
 	}
 })
 
+const bigInsert = (data)=>{
+	console.log("Comenzando super insert...")
+	return new Promise((res,rej)=>{
+		conn.query('INSERT INTO logs VALUES ?',[data],(err,response)=>{
+			if (err) {
+				rej(err)
+			} else {
+				console.log("Filas afectadas: "+response.affectedRows);
+				res({isWorking: true})
+			}
+		});
+	})
+}
 //con esta query obtengo la cantidad de interacciones de cada estudiante para el curso en general
 const bigquery = "SELECT student, COUNT(`student`) as CantInteracciones from logs LEFT OUTER JOIN testCHAEA ON `logs`.email = testCHAEA.email WHERE roleid=5 and testCHAEA.email IS NOT NULL GROUP BY `student` ORDER BY CantInteracciones"
 app.get('/graficocaja',(req,res)=>{
