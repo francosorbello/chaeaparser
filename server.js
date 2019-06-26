@@ -48,19 +48,7 @@ app.post('/insertchaea',(req,res)=>{
 		res.send({success: true})
 	})
 })
-const bigInsert = (data)=>{
-	console.log("Comenzando super insert...")
-	return new Promise((res,rej)=>{
-		conn.query('INSERT INTO logs VALUES ?',[data],(err,response)=>{
-			if (err) {
-				rej(err)
-			} else {
-				console.log("Filas afectadas: "+response.affectedRows);
-				res({isWorking: true})
-			}
-		});
-	})
-}
+
 const checking = (tabla)=>{
 	return new Promise((resolve,reject)=>{
 		conn.query("select * from ??",[tabla],(err,res)=>{
@@ -133,8 +121,7 @@ const bigquery = "SELECT student, COUNT(`student`) as CantInteracciones from log
 app.get('/graficocaja',(req,res)=>{
 	conn.query(bigquery,async (req,resp)=>{
 		//primero paso los resultados a enteros.
-		let interacciones=[];
-		interacciones = resp.map((item)=>{
+		let interacciones = resp.map((item)=>{
 			return parseInt(item.CantInteracciones);
 		})
 		let estudiantes = resp.map((item)=>{
@@ -157,6 +144,7 @@ const calculoLimites = (interacciones)=>{
 	var q1 = interacciones[aux-1];
 	var q2 = interacciones[2*aux-1];
 	var q3 = interacciones[3*aux-1];
+
 	return {min,max,q1,q2,q3}
 }
 

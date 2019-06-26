@@ -19,11 +19,11 @@
 			data: { logs: json },
 			success: (data) => {
 				if (data['success']) {
-					// alert("Los datos se han cargado correctamente.")
 					document.getElementById('loader'+aux_loader).style.display="none"
 					document.getElementById('loaded'+aux_loader).style.display="inline"
 					
-					if (document.getElementById('loaded1').style.display=="inline" && document.getElementById('loaded2').style.display=="inline")
+					if (document.getElementById('loaded1').style.display=="inline" && 
+					document.getElementById('loaded2').style.display=="inline")
 						document.getElementById('boton').disabled = false;
 					return;
 				}
@@ -39,9 +39,6 @@
 
 }());
 $(document).ready(()=>{
-	//activo los tooltips
-	$('[data-toggle="tooltip"]').tooltip(); 
-	
 	$.ajax({
 		url:'checkdb',
 		method: 'GET',

@@ -67,3 +67,4 @@ $(document).ready(()=>{
         crearTablaACT(resp2[0].clicks,resp2[0].titulos)
     })
 })
+

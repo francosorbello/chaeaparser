@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
 	<title>CHAEAParser V1</title>
-	
+	<script src="scripts/jquery-3.3.1.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -15,7 +15,7 @@
 				<a class="nav-link" href="index.html">Home</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="rescaja.html">Resultados</a>
+				<a id="resultados" class="nav-link" style="pointer-events: none" href="rescaja.html">Resultados</a>
 			</li>
 			<li class="nav-item active">
 					<a class="nav-link" href="docs.html">Documentación</a>
@@ -49,4 +49,19 @@
 		<p></p>
 	</div>
 </body>
+<footer>
+	<script>
+		$(document).ready(()=>{
+			$.ajax({
+				url:'checkdb',
+				method: 'GET',
+				success: (data)=>{
+					if(data.vacio){
+						document.getElementById("resultados").style.pointerEvents = "auto";
+					}
+				}
+			})
+		})	
+	</script>
+</footer>
 </html>
