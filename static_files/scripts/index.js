@@ -49,3 +49,16 @@ $(document).ready(()=>{
 		}
 	})
 })
+function limpiarTablas(){
+	$.ajax({
+		url: "cleartables",
+		method: "GET",
+		success: (data)=>{
+			if(data.success){
+				alert("Las tablas se han limpiado correctamente.")
+			}else{
+				alert("Ha habido un problema al intentar limpiar las tablas.")
+			}
+		}
+	})
+}

@@ -63,21 +63,33 @@ const checking = (tabla)=>{
 }
 
 const cleaning = (tabla)=>{
-	conn.query("DELETE FROM ??",[tabla],(err,res)=>{
-		if (err) throw err;
-
-		console.log("Filas afectadas: "+res.affectedRows)
+	console.log("LIMPIANDO "+tabla)
+	return new Promise((resolve,reject)=>{
+		conn.query("DELETE FROM ??",[tabla],(err,res)=>{
+			if (err) {
+				console.log("Algo salió mal: ")
+				console.log(err)
+				resolve(false);
+			} else{
+				console.log("Filas afectadas: "+res.affectedRows)
+				resolve(true)
+			}
+		})	
 	})
-} 
+}
 
-app.delete('/cleartables',(req,res)=>{
-	cleaning("logs");
-	cleaning("testCHAEA");
-	res.send({success: true})
+
+app.get('/cleartables', async (req,res)=>{
+		var rta = false;
+		const log = await cleaning("logs");
+		const test = await cleaning("testCHAEA");	
+		if(test && log)
+			rta = true;
+		
+		res.send({success: rta})
 })
 
 app.get('/checkdb',async (req,res)=>{
-	const texto = "testCHAEA"
 	const logs = await checking("logs")
 	const test = await checking("testCHAEA")
 
