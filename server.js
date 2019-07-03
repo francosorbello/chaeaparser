@@ -5,10 +5,14 @@ var bodyParser = require('body-parser')
 
 //creo la conexion
 const conn = mysql.createConnection({
-	host: 'localhost',
+	host: 'mysql',
 	user: 'root',
-	database: 'proyectodb'
+	password: 'pass123',
+	database: 'proyectodb',
+	insecureAuth: true
 })
+
+
 //establezco conexion
 conn.connect((err)=>{
 	if(err){
@@ -27,7 +31,7 @@ app.use(bodyParser.json({limit: "10mb"}));
 app.use(bodyParser.urlencoded({limit: "10mb",extended: true,parameterLimit: 100000}));
 
 //abro puerto 
-app.listen(3001,()=>{
+app.listen(3002,()=>{
     console.log('Server iniciado.')
 });
 
